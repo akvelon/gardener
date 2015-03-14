@@ -18,6 +18,14 @@ namespace Gardener
             else if (sensorName == "soil_humidity")
             {
                 return new Random().Next();
+            } 
+            else if (sensorName == "humidity")
+            {
+                return new Random().Next();
+            }
+            else if (sensorName == "solarFlow")
+            {
+                return new Random().Next();
             }
             else if (sensorName == "soil_temperature")
             {

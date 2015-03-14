@@ -6,7 +6,7 @@ namespace Gardener
     public class GardenerService :IDisposable
     {
         private const string SERVICE_NAME = "com.akvelon.gardener";
-        private const string INTERFACE_NAME = "com.akvelon.gardener.flowerpot";
+        private const string INTERFACE_NAME = "com.akvelon.gardener";
         private const string SERVICE_PATH = "/flowerpot";
         
         private const bool ALLOW_REMOTE_MESSAGES = true;
@@ -24,7 +24,7 @@ namespace Gardener
 
             ajAttachment.CreateInterface(INTERFACE_NAME, DISABLE_SECURITY, out iface);
 
-            iface.AddProperty("humidity", "d", AllJoyn.InterfaceDescription.AccessFlags.Read);
+            iface.AddProperty("humidity", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
             iface.AddProperty("solarFlow", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
             iface.AddMethod("waterPumpOn", "i", "b", "interval,hasActivator");
             iface.AddMethod("waterPumpOff", "i", "b", "interval,hasActivator");

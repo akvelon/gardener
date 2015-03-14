@@ -18,7 +18,7 @@
  */
 
 var INTERFACE_NAME = "com.akvelon.gardener";
-var SERVICE_NAME = "com.akvelon.gardener.flowerpot";
+var SERVICE_NAME = "com.akvelon.gardener";
 
 var BUS_NAME = "cordova.gardener." + cordova.platformId;
 var SERVICE_PATH = "/flowerpot";
@@ -63,7 +63,7 @@ var app = {
     createInterface: function (successCallback, errorCallback) {
         app.busAttachment.createInterface(function (interfaceDesc) {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
-            interfaceDesc.addProperty('humidity', "d");
+            interfaceDesc.addProperty('humidity', "i");
             interfaceDesc.addProperty('solarFlow', "i");
 
             interfaceDesc.addMethod("waterPumpOn", "i", "b", "interval,hasActivator");
@@ -172,7 +172,12 @@ var app = {
 
             app.proxyBusObject.getProperty(function (res) {
                 console.log('Currrent humidity: ' + res);
-            }, app.fail("Unable to get property"), INTERFACE_NAME, 'humidity'); //solarFlow
+            }, app.fail("Unable to get property"), "com.akvelon.gardener", 'humidity');
+
+
+            //app.proxyBusObject.getProperty(function (res) {
+            //    console.log('Currrent solarFlow: ' + res);
+            //}, app.fail("Unable to get property"), "com.akvelon.gardener", 'solarFlow');
 
         }, 1000);
     },
