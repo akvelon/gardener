@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40121.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GardenerService", "GardenerService\GardenerService.csproj", "{D2AC8B60-CBFC-4B44-9E5C-2B95391C5015}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GardenerDevice", "GardenerDevice\GardenerDevice.csproj", "{10A6D1B2-E808-4FE8-9185-469A513A3D69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GardenerApplication", "GardenerApplication\GardenerApplication.csproj", "{55F7DB33-F356-4956-B790-2B1840B5CA1E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D2AC8B60-CBFC-4B44-9E5C-2B95391C5015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2AC8B60-CBFC-4B44-9E5C-2B95391C5015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2AC8B60-CBFC-4B44-9E5C-2B95391C5015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2AC8B60-CBFC-4B44-9E5C-2B95391C5015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10A6D1B2-E808-4FE8-9185-469A513A3D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10A6D1B2-E808-4FE8-9185-469A513A3D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10A6D1B2-E808-4FE8-9185-469A513A3D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10A6D1B2-E808-4FE8-9185-469A513A3D69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55F7DB33-F356-4956-B790-2B1840B5CA1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55F7DB33-F356-4956-B790-2B1840B5CA1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55F7DB33-F356-4956-B790-2B1840B5CA1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55F7DB33-F356-4956-B790-2B1840B5CA1E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
