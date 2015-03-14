@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="alljoyn_unity">
-      <HintPath>..\..\..\..\cordova\plugins\msopentech\cordova-plugin-alljoyn\src\windows\libs\alljoyn_unity.dll</HintPath>
+      <HintPath>libs\alljoyn_unity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
