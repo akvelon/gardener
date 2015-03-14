@@ -7,8 +7,8 @@
     <ProjectGuid>{10A6D1B2-E808-4FE8-9185-469A513A3D69}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClassLibrary1</RootNamespace>
-    <AssemblyName>ClassLibrary1</AssemblyName>
+    <RootNamespace>GardenerDevice</RootNamespace>
+    <AssemblyName>GardenerDevice</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
