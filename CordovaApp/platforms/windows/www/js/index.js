@@ -63,11 +63,15 @@ var app = {
     createInterface: function (successCallback, errorCallback) {
         app.busAttachment.createInterface(function (interfaceDesc) {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
-            interfaceDesc.addProperty('humidity', "i");
-            interfaceDesc.addProperty('solarFlow', "i");
+            //interfaceDesc.addProperty('humidity', "i");
+            //interfaceDesc.addProperty('solarFlow', "i");
 
             interfaceDesc.addMethod("waterPumpOn", "i", "b", "interval,hasActivator");
             interfaceDesc.addMethod("waterPumpOff", "i", "b", "interval,hasActivator");
+
+            interfaceDesc.addMethod("humidity", "", "d", "interval,hasActivator");
+            interfaceDesc.addMethod("solarFlow", "", "d", "interval,hasActivator");
+
             
             interfaceDesc.activate(function () {
                 app.log("Interface " + INTERFACE_NAME + " Activated successfully");
@@ -170,14 +174,17 @@ var app = {
     pollStatus: function() {
         setInterval(function () {
 
-            app.proxyBusObject.getProperty(function (res) {
-                console.log('Currrent humidity: ' + res);
-            }, app.fail("Unable to get property"), "com.akvelon.gardener", 'humidity');
-
-
             //app.proxyBusObject.getProperty(function (res) {
-            //    console.log('Currrent solarFlow: ' + res);
-            //}, app.fail("Unable to get property"), "com.akvelon.gardener", 'solarFlow');
+            //    console.log('Currrent humidity: ' + res);
+            //}, app.fail("Unable to get property"), "com.akvelon.gardener", 'humidity');
+
+            app.proxyBusObject.methodCall(function (res) {
+                console.log('Currrent humidity: ' + res);
+            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'humidity', []);
+
+            app.proxyBusObject.methodCall(function (res) {
+                console.log('Currrent solarFlow: ' + res);
+            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'solarFlow', []);
 
         }, 1000);
     },

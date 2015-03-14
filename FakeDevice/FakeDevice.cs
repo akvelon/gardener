@@ -52,23 +52,26 @@ namespace Gardener
 
         public bool EnableServo(string servoName, int timeout)
         {
-            if (servoName == "water_pump")
-            {
-                if (timeout > 0)
-                {
-                    var timer = new Timer(timeout);
-                    timer.Elapsed += (sender, e) => onDisableServo(sender, e, servoName);
-                    timer.Enabled = true;
-                }
-                return true;
-            }
+            return true;
+            //if (servoName == "water_pump")
+            //{
+            //    if (timeout > 0)
+            //    {
+            //        var timer = new Timer(timeout);
+            //        timer.Elapsed += (sender, e) => onDisableServo(sender, e, servoName);
+            //        timer.Enabled = true;
+            //    }
+            //    return true;
+            //}
 
-            return false;
+            //return false;
         }
 
         public bool DisableServo(string servoName, int timeout)
         {
-            return servoName == "water_pump";
+            //return servoName == "water_pump";
+
+            return true;
         }
     }
 }

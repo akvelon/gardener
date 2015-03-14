@@ -24,10 +24,17 @@ namespace Gardener
 
             ajAttachment.CreateInterface(INTERFACE_NAME, DISABLE_SECURITY, out iface);
 
-            iface.AddProperty("humidity", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
-            iface.AddProperty("solarFlow", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
+            //iface.AddProperty("humidity", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
+            //iface.AddProperty("solarFlow", "i", AllJoyn.InterfaceDescription.AccessFlags.Read);
+
+
             iface.AddMethod("waterPumpOn", "i", "b", "interval,hasActivator");
             iface.AddMethod("waterPumpOff", "i", "b", "interval,hasActivator");
+
+            iface.AddMethod("humidity", "", "d", "interval,hasActivator");
+            iface.AddMethod("solarFlow", "", "d", "interval,hasActivator");
+
+
             iface.Activate();
 
             var busObject = new DeviceObject(ajAttachment, device, SERVICE_PATH, INTERFACE_NAME);

@@ -23,14 +23,31 @@ namespace Gardener
             var members = iface.GetMembers();
             foreach (var member in members)
             {
-                if (member.Name == "waterPumpOff")
+                if (member.Name == "waterPumpOff" || member.Name == " waterPumpOn")
                 {
-                    AddMethodHandler(member, (method, message) => device.DisableServo("water_pump", message.GetArg(0)));
+                    AddMethodHandler(member, (method, message) => {
+
+
+                        bool res = device.DisableServo("water_pump", -1);
+                        AllJoyn.MsgArg outArgs = new AllJoyn.MsgArg();
+                        outArgs = res;
+
+                        status = MethodReply(message, outArgs);
+                    });
                 }
 
-                if (member.Name == "waterPumpOn")
+                if (member.Name == "humidity" || member.Name == "solarFlow")
                 {
-                    AddMethodHandler(member, (method, message) => device.DisableServo("water_pump", message.GetArg(0)));
+                    AddMethodHandler(member, (method, message) =>
+                    {
+                        var value = device.GetSensorValue(member.Name);
+                        var valAsString = Convert.ToDouble(value);
+                        AllJoyn.MsgArg outArgs = new AllJoyn.MsgArg();
+                        outArgs = valAsString;
+                        //outArgs.Set("s", valAsString);
+                        
+                        status = MethodReply(message, outArgs);
+                    });
                 }
             }
         }
