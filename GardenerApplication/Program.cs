@@ -1,13 +1,17 @@
 ﻿using Gardener;
+using System;
 
-namespace GardenerApplication
+namespace GardenerServiceApplication
 {
-    class Program
+    static class GardenerServiceApplication
     {
         static void Main(string[] args)
         {
-            var device = new GardenerDevice("COM2");
+            var device = new FakeDevice("COM2");
             var service = new GardenerService(device);
+
+            Console.WriteLine("Press key for exit...");
+            Console.ReadKey();
         }
     }
 }

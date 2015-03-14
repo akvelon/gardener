@@ -2,7 +2,7 @@
 
 namespace Gardener
 {
-    interface IGardenerDevice
+    public interface IGardenerDevice
     {
         int GetSensorValue(String sensorName);
 

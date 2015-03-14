@@ -1,0 +1,37 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "package.appxmanifest": {
+                "parents": {
+                    "/Package/Capabilities": [
+                        {
+                            "xml": "<Capability Name=\"internetClient\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"internetClientServer\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<Capability Name=\"privateNetworkClientServer\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "com.msopentech.allJoyn": {
+            "PACKAGE_NAME": "HelloCordova"
+        },
+        "org.apache.cordova.dialogs": {
+            "PACKAGE_NAME": "HelloCordova"
+        }
+    },
+    "dependent_plugins": {}
+}

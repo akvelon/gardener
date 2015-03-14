@@ -1,0 +1,15 @@
+{
+    "org.apache.cordova.dialogs": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/apache/cordova-plugin-dialogs/",
+            "subdir": "."
+        }
+    },
+    "com.msopentech.allJoyn": {
+        "source": {
+            "type": "local",
+            "path": "d:\\Projects\\msot\\git\\alljoyn\\cordova-plugin-alljoyn"
+        }
+    }
+}
