@@ -32,4 +32,12 @@
         <Capability Name="internetClientServer" />
         <Capability Name="privateNetworkClientServer" />
     </Capabilities>
+  <Extensions>
+    <Extension Category="windows.activatableClass.inProcessServer">
+      <InProcessServer>
+        <Path>CLRHost.dll</Path>
+        <ActivatableClass ActivatableClassId="MSOpenTech.AllJoyn.CordovaProxy" ThreadingModel="both" />
+      </InProcessServer>
+    </Extension>
+  </Extensions>
 </Package>

@@ -16,7 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+var INTERFACE_NAME = "com.akvelon.gardener";
+var SERVICE_NAME = "com.akvelon.gardener.flowerpot";
+
+var BUS_NAME = "cordova.gardener." + cordova.platformId;
+var SERVICE_PATH = "/flowerpot";
+var SERVICE_PORT = 1001;
+
+
+var CONNECT_SPEC = null;//"tcp:addr=127.0.0.1,port=9955";
+
 var app = {
+    busAttachment: null,
+    proxyBusObject: null,
+
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -33,8 +47,136 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        app.receivedEvent('deviceready');
+
+        var BusAttachment = msopentech.alljoyn.BusAttachment;
+
+        BusAttachment.create(function (busAttachment) {
+            app.busAttachment = busAttachment;
+
+            app.createInterface(function () {
+                app.startBusAndConnect(null, app.fail("Failed to start/connect BusAttachment"));
+            }, app.fail("Failed to create intreface at local BusAttachment"));
+        }, app.fail("Failed to create bus " + BUS_NAME), BUS_NAME);
     },
+
+    // Creates interface, adds necessary methods and activates it
+    createInterface: function (successCallback, errorCallback) {
+        app.busAttachment.createInterface(function (interfaceDesc) {
+            app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
+            interfaceDesc.addProperty('humidity', "d");
+            interfaceDesc.addProperty('solarFlow', "i");
+
+            interfaceDesc.addMethod("waterPumpOn", "i", "b", "interval,hasActivator");
+            interfaceDesc.addMethod("waterPumpOff", "i", "b", "interval,hasActivator");
+            
+            interfaceDesc.activate(function () {
+                app.log("Interface " + INTERFACE_NAME + " Activated successfully");
+                successCallback(interfaceDesc);
+            }, errorCallback);
+        }, errorCallback, INTERFACE_NAME);
+    },
+
+    // Starts created busAttachment, connects to existing bus and tries to find existing services
+    startBusAndConnect: function (successCallback, errorCallback) {
+        app.busAttachment.start(function () {
+            app.busAttachment.connect(function () {
+                app.busAttachment.addEventListener('foundAdvertisedName', app.advertisedNameFound(app.busAttachment));
+
+                app.busAttachment.findAdvertisedName(function () {
+                    app.log("BusAttachment  " + BUS_NAME + " created and connected successfully");
+                }, errorCallback, INTERFACE_NAME);
+              
+            }, errorCallback, CONNECT_SPEC);
+        }, errorCallback);
+    },
+
+    // Event handler for foundAdvertisedName event. Joins an existing session if any, and tries to call a remote method
+    advertisedNameFound: function (busAttachment) {
+
+        // Initialize shortcuts to AllJoyn objects
+        var SessionOpts = msopentech.alljoyn.SessionOpts;
+        var TransportMask = msopentech.alljoyn.TransportMask;
+
+        var opts = new SessionOpts(SessionOpts.TrafficType.TRAFFIC_MESSAGES,
+            false, SessionOpts.Proximity.PROXIMITY_ANY, TransportMask.TRANSPORT_ANY);
+
+        var advertisedNameFoundHandler = function advertisedNameFoundHandler(host) {
+
+            busAttachment.removeEventListener('foundAdvertisedName', advertisedNameFoundHandler);
+
+            busAttachment.joinSession(function (sessionId) {
+                busAttachment.addEventListener('sessionLost', function (sessionId, reason) {
+                    app.log("Lost session " + sessionId + ", reason: " + reason);
+                }, sessionId);
+
+                app.log('Joined session ' + sessionId);
+                app.createProxyBusObject(busAttachment, sessionId, function(proxyBusObject) {
+                    app.proxyBusObject = proxyBusObject;
+                    app.receivedEvent('deviceready');
+                });
+            }, app.fail("Failed to join session"), host, SERVICE_PORT, opts);
+        };
+
+        // return actual handler for advertisedNameFound event
+        return advertisedNameFoundHandler;
+    },
+
+    // Creates a proxy object and adds the existing interface to it
+    createProxyBusObject: function (busAttachment, sessionId, successCallback, errorCallback) {
+
+        // Initialize shortcuts to AllJoyn objects
+        var ProxyBusObject = msopentech.alljoyn.ProxyBusObject;
+
+        ProxyBusObject.create(function (proxy) {
+            busAttachment.getInterfaces(function(interfaces) {
+                var remoteInterface = interfaces.filter(function (iface) {
+                    return iface.name === INTERFACE_NAME;
+                })[0];
+
+                proxy.addInterface(function () {
+                    app.log("Successfully added interface to proxy");
+                    successCallback(proxy);
+                }, errorCallback, remoteInterface);
+
+            }, errorCallback);
+        }, errorCallback, busAttachment, SERVICE_NAME, SERVICE_PATH, sessionId);
+    },
+
+    // Generic failure handler
+    fail: function(message) {
+
+        // Initialize shortcuts to AllJoyn objects
+        var Status = msopentech.alljoyn.Status;
+
+        return function (err) {
+            var status = new Status(err);
+            app.log(status);
+            message && app.log(message);
+        };
+    },
+
+    // Generic log method
+    log: function (data) {
+        console.log(data);
+        if (!app.logArea) {
+            app.logArea = document.getElementById('log');
+        }
+
+        if (app.logArea) {
+            app.logArea.textContent += data.toString() + '\n';
+        }
+    },
+
+    pollStatus: function() {
+        setInterval(function () {
+
+            app.proxyBusObject.getProperty(function (res) {
+                console.log('Currrent humidity: ' + res);
+            }, app.fail("Unable to get property"), INTERFACE_NAME, 'humidity'); //solarFlow
+
+        }, 1000);
+    },
+
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         var parentElement = document.getElementById(id);
@@ -45,6 +187,9 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
+
+        app.pollStatus();
+        
     }
 };
 

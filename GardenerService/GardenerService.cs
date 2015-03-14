@@ -34,7 +34,9 @@ namespace Gardener
 
             ajAttachment.Start();
             ajAttachment.RegisterBusObject(busObject);
-            ajAttachment.Connect();
+            var status = ajAttachment.Connect();
+
+            Console.WriteLine("AllJOyn service Connect status: {0}", status);
 
             ajAttachment.RequestName(SERVICE_NAME,
                 AllJoyn.DBus.NameFlags.ReplaceExisting | AllJoyn.DBus.NameFlags.DoNotQueue);
@@ -45,7 +47,9 @@ namespace Gardener
 
             ajAttachment.BindSessionPort(ref SERVICE_PORT, sessionOpts, joinSessionListener);
             
-            ajAttachment.AdvertiseName(SERVICE_NAME, AllJoyn.TransportMask.Any);
+             status = ajAttachment.AdvertiseName(SERVICE_NAME, AllJoyn.TransportMask.Any);
+
+            Console.WriteLine("AllJOyn service AdvertiseName status: {0}", status);
         }
 
         public void Dispose()
