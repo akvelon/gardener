@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="com.msopentech.allJoyn"
+    version="0.0.1">
+    <name>AllJoyn</name>
+    <description>Apache Cordova AllJoyn Plugin</description>
+
+    <license>Apache 2.0</license>
+    <keywords>AllJoyn, IoT</keywords>
+    <repo>https://github.com/msopentech/cordova-plugin-alljoyn</repo>
+    <issue>https://github.com/msopentech/cordova-plugin-alljoyn/issues</issue>
+
+    <js-module src="www/BusAttachment.js" name="BusAttachment"/>
+    <js-module src="www/ProxyBusObject.js" name="ProxyBusObject"/>
+    <js-module src="www/InterfaceDescription.js" name="InterfaceDescription"/>
+    <js-module src="www/SessionOpts.js" name="SessionOpts"/>
+    <js-module src="www/TransportMask.js" name="TransportMask"/>
+    <js-module src="www/Status.js" name="Status"/>
+
+    <js-module src="www/AllJoyn.js" name="AllJoyn">
+        <clobbers target="msopentech.alljoyn" />
+    </js-module>
+
+    <!-- windows -->
+    <platform name="windows">
+        <js-module src="src/windows/AllJoynProxy.js" name="AllJoynProxy">
+            <runs />
+        </js-module>
+		
+        <framework src="src/windows/MSOpenTech.AllJoyn/MSOpenTech.AllJoyn.csproj"
+                   custom="true" type="projectReference" target="windows" />
+        <!-- use x64 native lib by default; pre_package hook replaces it w/ correct version during build -->
+        <source-file src="src/windows/libs/x64/alljoyn_unity_native.dll" target-dir="../.." />
+        
+		<hook type="after_plugin_install" src="scripts/afterPluginInstall.js" />
+        <hook type="pre_package" src="scripts/beforePackageWindows.js" />
+		
+		 <config-file target="package.appxmanifest" parent="/Package/Capabilities">
+			<Capability Name="internetClient" />
+			<Capability Name="internetClientServer" />
+			<Capability Name="privateNetworkClientServer" />
+        </config-file>
+		
+    </platform>
+</plugin>
