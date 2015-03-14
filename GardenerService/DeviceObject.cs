@@ -40,7 +40,13 @@ namespace Gardener
                 {
                     AddMethodHandler(member, (method, message) =>
                     {
-                        var value = device.GetSensorValue(member.Name);
+                        var sensorName = "light";
+
+                        if (member.Name == "humidity") {
+                            sensorName = "soil_humidity";
+                        }
+
+                        var value = device.GetSensorValue(sensorName);
                         var valAsString = Convert.ToDouble(value);
                         AllJoyn.MsgArg outArgs = new AllJoyn.MsgArg();
                         outArgs = valAsString;

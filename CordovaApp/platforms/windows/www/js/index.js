@@ -186,7 +186,7 @@ var app = {
                 console.log('Currrent solarFlow: ' + res);
             }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'solarFlow', []);
 
-        }, 1000);
+        }, 5000);
     },
 
     // Update DOM on a Received Event
