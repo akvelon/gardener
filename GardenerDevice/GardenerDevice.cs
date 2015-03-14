@@ -6,90 +6,75 @@ using System.Threading.Tasks;
 using Sharpduino;
 using Sharpduino.Constants;
 using System.Timers;
+using System.IO.Ports;
+
 namespace Gardener
 {
     public class GardenerDevice: IGardenerDevice
     {
         private string portName;
-        private ArduinoUno arduino;
-        private const ArduinoUnoPins waterPumpPin = ArduinoUnoPins.D13;
-        private const ArduinoUnoAnalogPins lightSensorPin = ArduinoUnoAnalogPins.A0;
-        private const ArduinoUnoAnalogPins soilHumiditySensorPin = ArduinoUnoAnalogPins.A1;
-        private const ArduinoUnoAnalogPins soilTemperatureSensorPin = ArduinoUnoAnalogPins.A2;
-        private const ArduinoUnoAnalogPins airTemperatureSensorPin = ArduinoUnoAnalogPins.A3;
-        private const ArduinoUnoAnalogPins airHumiditySensorPin = ArduinoUnoAnalogPins.A4;
-        private static Timer offTimer;
+        private SerialPort arduinoPort;
 
         public GardenerDevice(String portName)
         {
             this.portName = portName;
-            arduino = new ArduinoUno(portName);
-            arduino.SetPinMode(waterPumpPin, PinModes.Output);
+            try
+            {
+                arduinoPort = new SerialPort(portName, 9600, Parity.None, 8, StopBits.One);
+                arduinoPort.NewLine = "\n";
+                arduinoPort.Open();
+
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Error opening serial port {0}", portName);
+                System.Environment.Exit(1);
+            }
+        }
+
+        private String executeSerialCommand(String command)
+        {
+            if (!arduinoPort.IsOpen)
+            {
+                return "";
+            }
+            arduinoPort.Write(command + '\n');
+            return arduinoPort.ReadLine();
+        }
+
+        private string setActuatorState(String actuatorName, Boolean state)
+        {
+            if (state)
+            {
+                return executeSerialCommand("ENABLE" + actuatorName);
+            }
+            else
+            {
+                return executeSerialCommand("DISABLE" + actuatorName);
+            }
         }
 
         public int GetSensorValue(string sensorName)
         {
-            if (sensorName == "light")
+            String value = executeSerialCommand("GET " + sensorName); 
+            if (value == "SENSOR NOT FOUND")
             {
-                return (int)Math.Ceiling((arduino.ReadAnalog(lightSensorPin)));
-            } 
-            else if(sensorName == "soil_humidity")
-            {
-                return (int)Math.Ceiling(arduino.ReadAnalog(soilHumiditySensorPin));
-            } 
-            else if(sensorName == "soil_temperature")
-            {
-                return (int)Math.Ceiling(arduino.ReadAnalog(airTemperatureSensorPin));
-            } 
-            else if(sensorName == "air_humidity")
-            {
-                return (int)Math.Ceiling(arduino.ReadAnalog(airHumiditySensorPin));
-            }
-            else if (sensorName == "air_temperature")
-            {
-                return (int)Math.Ceiling(arduino.ReadAnalog(airTemperatureSensorPin));
+                throw new Exception("Error. Unknown sensor name.");
             }
             else
             {
-                throw new Exception("Unknown sensor name");
+                return Convert.ToInt16(value);
             }
-        }
-
-        private void onDisableServo(object sender, ElapsedEventArgs e, string servoName)
-        {
-            DisableServo(servoName, 0);
         }
 
         public bool EnableServo(string servoName, int timeout)
         {
-            if (servoName == "water_pump")
-            {
-                if (timeout > 0)
-                {
-                    Timer timer = new Timer(timeout);
-                    timer.Elapsed += new ElapsedEventHandler((sender, e) => onDisableServo(sender, e, servoName));
-                    timer.Enabled = true;
-                }
-                arduino.SetDO(waterPumpPin, true);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return setActuatorState(servoName, true) == "OK";
         }
 
         public bool DisableServo(string servoName, int timeout)
         {
-            if (servoName == "water_pump")
-            {
-                arduino.SetDO(waterPumpPin, false);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return setActuatorState(servoName, false) == "OK";
         }
     }
 }
