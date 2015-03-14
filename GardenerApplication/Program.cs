@@ -1,4 +1,5 @@
 ﻿using Gardener;
+using System;
 
 namespace GardenerServiceApplication
 {
@@ -9,10 +10,8 @@ namespace GardenerServiceApplication
             var device = new FakeDevice("COM2");
             var service = new GardenerService(device);
 
-            while (true)
-            {
-                System.Threading.Thread.Sleep(1);
-            }
+            Console.WriteLine("Press key for exit...");
+            Console.ReadKey();
         }
     }
 }
