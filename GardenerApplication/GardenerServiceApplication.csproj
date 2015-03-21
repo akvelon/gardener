@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -59,9 +60,9 @@
       <Project>{10a6d1b2-e808-4fe8-9185-469a513a3d69}</Project>
       <Name>GardenerDevice</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GardenerService\GardenerService.csproj">
-      <Project>{d2ac8b60-cbfc-4b44-9e5c-2b95391c5015}</Project>
-      <Name>GardenerService</Name>
+    <ProjectReference Include="..\GardenerService2\GardenerService2.vcxproj">
+      <Project>{34eda0ec-d219-4453-aa3f-d6729965a899}</Project>
+      <Name>Akvelon.Gardener.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
