@@ -5,7 +5,7 @@
  */
 
 /******************************************************************************
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) 2010-2014, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -23,7 +23,6 @@
 #define _QCC_STRING_H
 
 #include <qcc/platform.h>
-#include <qcc/StaticGlobalsInit.h>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>

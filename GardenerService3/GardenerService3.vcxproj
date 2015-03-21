@@ -63,7 +63,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>alljoyn.lib;ajrouter.lib;BundledRouter.obj;ws2_32.lib;Secur32.lib;crypt32.lib;Bcrypt.lib;Ncrypt.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Secur32.lib;crypt32.lib;Bcrypt.lib;Ncrypt.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <ProjectReference>
@@ -87,7 +87,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>alljoyn.lib;ajrouter.lib;BundledRouter.obj;ws2_32.lib;Secur32.lib;crypt32.lib;Bcrypt.lib;Ncrypt.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>ws2_32.lib;Secur32.lib;crypt32.lib;Bcrypt.lib;Ncrypt.lib;iphlpapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <ProjectReference>
@@ -103,6 +103,57 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutData.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIcon.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIconObj.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIconProxy.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutObj.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutObjectDescription.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AboutProxy.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynCrypto.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynPeerObj.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynStd.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechLogon.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechPIN.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechRSA.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechSRP.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AutoPinger.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\AutoPingerInternal.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\BusAttachment.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\BusEndpoint.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\BusObject.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\BusUtil.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\ClientRouter.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\ClientTransport.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\CompressionRules.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\CredentialAccessor.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\DBusCookieSHA1.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\DBusStd.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\EndpointAuth.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\InterfaceDescription.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\KeyExchanger.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\KeyStore.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\LocalTransport.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\Message.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\Message_Gen.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\Message_Parse.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\MethodTable.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\MsgArg.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\NullTransport.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\PasswordManager.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\PeerState.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\ProtectedAuthListener.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\ProxyBusObject.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\RemoteEndpoint.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\Rule.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\SASLEngine.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\SessionOpts.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\SignalTable.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\SignatureUtils.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\SimpleBusListener.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\Transport.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\TransportList.cc" />
+    <ClCompile Include="external\alljoyn_cpp\src\version.cc" />
     <ClCompile Include="GardenerService3.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>

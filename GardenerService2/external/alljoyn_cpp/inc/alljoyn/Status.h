@@ -6,7 +6,7 @@
  * Note: This file is generated during the make process.
  */
 /******************************************************************************
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) 2009-2015, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -39,15 +39,6 @@
 #    define AJ_CALL __stdcall
 #  else
 #    define AJ_CALL
-#  endif
-#endif
-
-/** This @#define allows for calling convention redefinition on relevant platforms */
-#ifndef CDECL_CALL
-#  if defined(QCC_OS_GROUP_WINDOWS)
-#    define CDECL_CALL __cdecl
-#  else
-#    define CDECL_CALL
 #  endif
 #endif
 

@@ -32,5 +32,158 @@
     <ClCompile Include="GardenerService3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutData.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIcon.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIconObj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutIconProxy.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutObj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutObjectDescription.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AboutProxy.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynCrypto.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynPeerObj.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AllJoynStd.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechLogon.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechPIN.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechRSA.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AuthMechSRP.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AutoPinger.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\AutoPingerInternal.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\BusAttachment.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\BusEndpoint.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\BusObject.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\BusUtil.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\ClientRouter.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\ClientTransport.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\CompressionRules.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\CredentialAccessor.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\DBusCookieSHA1.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\DBusStd.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\EndpointAuth.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\InterfaceDescription.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\KeyExchanger.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\KeyStore.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\LocalTransport.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\Message.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\Message_Gen.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\Message_Parse.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\MethodTable.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\MsgArg.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\NullTransport.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\PasswordManager.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\PeerState.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\ProtectedAuthListener.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\ProxyBusObject.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\RemoteEndpoint.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\Rule.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\SASLEngine.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\SessionOpts.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\SignalTable.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\SignatureUtils.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\SimpleBusListener.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\Transport.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\TransportList.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="external\alljoyn_cpp\src\version.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

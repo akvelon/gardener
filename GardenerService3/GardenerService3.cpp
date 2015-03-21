@@ -45,10 +45,10 @@ using namespace qcc;
 using namespace ajn;
 
 /*constants*/
-static const char* INTERFACE_NAME = "org.alljoyn.Bus.sample23";
-static const char* SERVICE_NAME = "org.alljoyn.Bus.sample23";
-static const char* SERVICE_PATH = "/sample23";
-static const SessionPort SERVICE_PORT = 26;
+static const char* INTERFACE_NAME = "org.alljoyn.Bus.sample";
+static const char* SERVICE_NAME = "org.alljoyn.Bus.sample";
+static const char* SERVICE_PATH = "/sample";
+static const SessionPort SERVICE_PORT = 25;
 
 class BasicSampleObject : public BusObject {
 public:

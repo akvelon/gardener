@@ -8,7 +8,7 @@
  */
 
 /******************************************************************************
- * Copyright AllSeen Alliance. All rights reserved.
+ * Copyright (c) 2009-2014, AllSeen Alliance. All rights reserved.
  *
  *    Permission to use, copy, modify, and/or distribute this software for any
  *    purpose with or without fee is hereby granted, provided that the above
@@ -623,7 +623,7 @@ class ProxyBusObject : public MessageReceiver {
      * @return
      *      - #ER_OK if successful.
      *      - #ER_BUS_BAD_CHILD_PATH if the path is a bad path
-     *      - #ER_BUS_OBJ_ALREADY_EXISTS if the object already exists on the ProxyBusObject
+     *      - #ER_BUS_OBJ_ALREADY_EXISTS the the object already exists on the ProxyBusObject
      */
     QStatus AddChild(const ProxyBusObject& child);
 
@@ -682,13 +682,13 @@ class ProxyBusObject : public MessageReceiver {
      *      - #ER_OK if the method call succeeded and the reply message type is #MESSAGE_METHOD_RET
      *      - #ER_BUS_REPLY_IS_ERROR_MESSAGE if the reply message type is #MESSAGE_ERROR
      */
-    virtual QStatus MethodCall(const char* ifaceName,
-                               const char* methodName,
-                               const MsgArg* args,
-                               size_t numArgs,
-                               Message& replyMsg,
-                               uint32_t timeout = DefaultCallTimeout,
-                               uint8_t flags = 0) const;
+    QStatus MethodCall(const char* ifaceName,
+                       const char* methodName,
+                       const MsgArg* args,
+                       size_t numArgs,
+                       Message& replyMsg,
+                       uint32_t timeout = DefaultCallTimeout,
+                       uint8_t flags = 0) const;
 
     /**
      * Make a fire-and-forget method call from this object. The caller will not be able to tell if
