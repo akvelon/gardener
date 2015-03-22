@@ -1,5 +1,3 @@
-#pragma unmanaged
-
 #include "stdafx.h"
 
 #include <assert.h>
@@ -24,10 +22,11 @@ using namespace ajn;
 
 
 /*constants*/
-static const char* INTERFACE_NAME = "org.alljoyn.Bus.sample";
-static const char* SERVICE_NAME = "org.alljoyn.Bus.sample";
-static const char* SERVICE_PATH = "/sample";
-static const SessionPort SERVICE_PORT = 25;
+static const char* INTERFACE_NAME = "com.akvelon.gardener";
+static const char* SERVICE_NAME = "com.akvelon.gardener";
+static const char* SERVICE_PATH = "/flowerpot";
+static const char* METHOD_NAME = "getParamValue";
+static const SessionPort SERVICE_PORT = 1001;
 
 static volatile sig_atomic_t s_interrupt = false;
 
@@ -35,6 +34,10 @@ static void __cdecl SigIntHandler(int sig)
 {
 	s_interrupt = true;
 }
+
+extern class BasicSampleObject;
+
+static BasicSampleObject* s_proxyObj = NULL;
 
 class BasicSampleObject : public BusObject {
 public:
@@ -46,9 +49,10 @@ public:
 		assert(exampleIntf);
 		AddInterface(*exampleIntf);
 
-		/** Register the method handlers with the object */
+		MessageReceiver::MethodHandler handler = static_cast<MessageReceiver::MethodHandler>(&BasicSampleObject::Cat2);
+
 		const MethodEntry methodEntries[] = {
-			{ exampleIntf->GetMember("cat"), static_cast<MessageReceiver::MethodHandler>(&BasicSampleObject::Cat) }
+			{ exampleIntf->GetMember(METHOD_NAME), handler }
 		};
 		QStatus status = AddMethodHandlers(methodEntries, sizeof(methodEntries) / sizeof(methodEntries[0]));
 		if (ER_OK != status) {
@@ -61,23 +65,23 @@ public:
 		BusObject::ObjectRegistered();
 		printf("ObjectRegistered has been called.\n");
 	}
+	
+	void Cat2(const InterfaceDescription::Member* member, Message& msg) {
+		s_proxyObj->Cat(member, msg);
+	}
+
 
 	void Cat(const InterfaceDescription::Member* member, Message& msg)
 	{
 
-
-		printf("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! Method was called !!!!!!!!!!!!!!!!!!!!!!");
+		printf("Method '%s' has been called. \n", this->GetName().c_str());
 
 		/* Concatenate the two input strings and reply with the result. */
-		qcc::String inStr1 = msg->GetArg(0)->v_string.str;
-		qcc::String inStr2 = msg->GetArg(1)->v_string.str;
-		qcc::String outStr = inStr1 + inStr2;
+		//qcc::String inStr1 = msg->GetArg(0)->v_string.str;
+		//qcc::String outStr = inStr1 + " value";
 
-		MsgArg outArg("s", outStr.c_str());
-		//outArg.Stabilize();
+		MsgArg outArg("d", 0.5);
 		QStatus status = MethodReply(msg, &outArg, 1);
-		//QStatus status = MethodReply(msg, "asdasdasd", "asdasdasd");
-		//QStatus status = MethodReply(msg, ER_OK);
 		if (ER_OK != status) {
 			printf("Ping: Error sending reply.\n");
 		}
@@ -121,7 +125,7 @@ QStatus CreateInterface(void)
 
 	if (status == ER_OK) {
 		printf("Interface created.\n");
-		testIntf->AddMethod("cat", "ss", "s", "inStr1,inStr2,outStr", 0);
+		testIntf->AddMethod(METHOD_NAME, "", "d", "outStr", 0);
 		testIntf->Activate();
 	}
 	else {
@@ -266,10 +270,10 @@ void startAllJoynService()
 		status = StartMessageBus();
 	}
 
-	BasicSampleObject* testObj = new BasicSampleObject(*s_msgBus, SERVICE_PATH);
+	s_proxyObj = new BasicSampleObject(*s_msgBus, SERVICE_PATH);
 
 	if (ER_OK == status) {
-		status = RegisterBusObject(testObj);
+		status = RegisterBusObject(s_proxyObj);
 	}
 
 	if (ER_OK == status) {
@@ -310,5 +314,3 @@ void startAllJoynService()
 	//printf("Basic service exiting with status 0x%04x (%s).\n", status, QCC_StatusText(status));
 
 }
-
-//#pragma managed

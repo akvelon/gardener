@@ -65,11 +65,8 @@ var app = {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
 
 
-        	//interfaceDesc.addMethod("getParamValue2", "s", "s", "paramName,paramValue");
-
-            interfaceDesc.addMethod("paramValue", "", "", "");
-
-            
+        	interfaceDesc.addMethod("getParamValue", "", "d", "paramValue");
+                        
             interfaceDesc.activate(function () {
                 app.log("Interface " + INTERFACE_NAME + " Activated successfully");
                 successCallback(interfaceDesc);
@@ -177,13 +174,21 @@ var app = {
 
             app.proxyBusObject.methodCall(function (res) {
                 console.log('Currrent humidity: ' + res);
-            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'paramValue', []);
+            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
+
+            app.proxyBusObject.methodCall(function (res) {
+                console.log('Currrent humidity: ' + res);
+            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
+
+            //app.proxyBusObject.methodCall(function (res) {
+            //    console.log('Currrent humidity: ' + res);
+            //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['solarFlow']);
 
             //app.proxyBusObject.methodCall(function (res) {
             //    console.log('Currrent solarFlow: ' + res);
             //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'solarFlow', []);
 
-        }, 5000);
+        }, 500);
     },
 
     // Update DOM on a Received Event
