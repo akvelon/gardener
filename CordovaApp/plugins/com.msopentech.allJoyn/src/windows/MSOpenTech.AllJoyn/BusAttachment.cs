@@ -282,6 +282,19 @@ namespace MSOpenTech.AllJoyn
             successCB(String.Empty);
         }
 
+        private class TempSessionListener: AllJoynUnity.AllJoyn.SessionListener 
+        {
+            
+            protected virtual void SessionLost(uint sessionId) {
+            }
+            protected virtual void SessionLost(uint sessionId, AllJoynUnity.AllJoyn.SessionListener.SessionLostReason reason) {
+            }
+            protected virtual void SessionMemberAdded(uint sessionId, string uniqueName) {
+            }
+            protected virtual void SessionMemberRemoved(uint sessionId, string uniqueName) {
+            }
+        }
+
         public static void busAttachmentJoinSession(CordovaSuccessCallback successCB, CordovaErrorCallback errorCB, [ReadOnlyArray] String[] args)
         {
             var bus = args.GetBusAttachment();
@@ -292,14 +305,26 @@ namespace MSOpenTech.AllJoyn
                 return;
             }
 
+            bus.SetDaemonDebug("ALL", 7);
+
             var host = args.GetArg(1);
             var port = ushort.Parse(args.GetArg(2));
             var optsObj = args.GetArg(3);
 
             uint sessionId;
             var optsData = Utils.Deserialize<SessionOptsContract>(optsObj);
-            var opts = new SessionOpts(optsData.traffic, optsData.isMultipoint, optsData.proximity, optsData.transports);
-            var result = bus.JoinSession(host, port, null, out sessionId, opts);
+
+            bus.EnableConcurrentCallbacks();
+
+			//optsData.isMultipoint = true;
+
+			//var opts = new SessionOpts(optsData.traffic, optsData.isMultipoint, optsData.proximity, optsData.transports);
+
+            var opts = new SessionOpts(SessionOpts.TrafficType.Messages, false, SessionOpts.ProximityType.Any, TransportMask.Any);
+
+            //SessionOpts opts(SessionOpts::TRAFFIC_MESSAGES, false, SessionOpts::PROXIMITY_ANY, TRANSPORT_ANY);
+
+            var result = bus.JoinSession(host, port, new TempSessionListener(), out sessionId, opts);
 
             if (!result)
             {

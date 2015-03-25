@@ -183,6 +183,18 @@ ProxyBusObject.prototype.methodCall = function (successCallback, errorCallback, 
     exec(successCallback, errorCallback, ALLJOYN_PROXY, 'proxyBusObjectMethodCall', [this._id, this._busId, interfaceName, methodName, JSON.stringify(args), timeout.toString()]);
 };
 
+ProxyBusObject.prototype.signal = function (successCallback, errorCallback, interfaceName, methodName, args, timeout) {
+    checkArgs('fFssAN', 'ProxyBusObject.methodCall', arguments);
+
+    timeout = timeout || ProxyBusObject.DefaultCallTimeout;
+    args = args || [];
+    if (!(args instanceof Array)) {
+        args = [args];
+    }
+
+    exec(successCallback, errorCallback, ALLJOYN_PROXY, 'proxyBusObjectMethodCall', [this._id, this._busId, interfaceName, methodName, JSON.stringify(args), timeout.toString()]);
+};
+
 /* The default timeout for method calls (25 seconds) */
 ProxyBusObject.DefaultCallTimeout = 25000;
 
