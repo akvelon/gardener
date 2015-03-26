@@ -17,15 +17,15 @@
  * under the License.
  */
 
-var INTERFACE_NAME = "com.akvelon.gardener";
-var SERVICE_NAME = "com.akvelon.gardener";
+var INTERFACE_NAME = "org.alljoyn.Bus.sample";
+var SERVICE_NAME = "org.alljoyn.Bus.sample";
 
 var BUS_NAME = "cordova.gardener." + cordova.platformId;
-var SERVICE_PATH = "/flowerpot";
-var SERVICE_PORT = 1001;
+var SERVICE_PATH = "/sample";
+var SERVICE_PORT = 25;
 
 
-var CONNECT_SPEC = null;//"tcp:addr=127.0.0.1,port=9955";
+var CONNECT_SPEC = null;//"tcp:addr=gardener,port=9955";
 
 var app = {
     busAttachment: null,
@@ -81,7 +81,7 @@ var app = {
                 app.busAttachment.addEventListener('foundAdvertisedName', app.advertisedNameFound(app.busAttachment));
 
                 app.busAttachment.findAdvertisedName(function () {
-                    app.log("BusAttachment  " + BUS_NAME + " created and connected successfully");
+                    app.log("BusAttachment  " + BUS_NAME + " created, looking for advertised name: " + INTERFACE_NAME);
                 }, errorCallback, INTERFACE_NAME);
               
             }, errorCallback, CONNECT_SPEC);
@@ -101,6 +101,8 @@ var app = {
         var advertisedNameFoundHandler = function advertisedNameFoundHandler(host) {
 
             busAttachment.removeEventListener('foundAdvertisedName', advertisedNameFoundHandler);
+
+            console.log('Advertised name has been found: ' + host);
 
             busAttachment.joinSession(function (sessionId) {
                 busAttachment.addEventListener('sessionLost', function (sessionId, reason) {
@@ -166,7 +168,7 @@ var app = {
     },
 
     pollStatus: function() {
-        setInterval(function () {
+        setTimeout(function () {
 
             //app.proxyBusObject.getProperty(function (res) {
             //    console.log('Currrent humidity: ' + res);

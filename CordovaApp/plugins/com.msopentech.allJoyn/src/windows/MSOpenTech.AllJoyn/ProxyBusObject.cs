@@ -202,26 +202,26 @@ namespace MSOpenTech.AllJoyn
             var propertyName = args.GetArg(3);
             var returnValue = new MsgArg();
 
-            var result = proxy.GetProperty(interfaceName, propertyName, returnValue);
-            if (!result)
-            {
-                errorCB(result);
-                return;
-            }
+            //var result = proxy.GetProperty(interfaceName, propertyName, returnValue);
+            //if (!result)
+            //{
+            //    errorCB(result);
+            //    return;
+            //}
 
-            string json;
-            try
-            {
-                var argObj = Utils.ParseMsgArg(returnValue);
-                json = Utils.Serialize(argObj);
-            }
-            catch (InvalidDataException)
-            {
-                errorCB(QStatus.BUS_CANNOT_EXPAND_MESSAGE);
-                return;
-            }
+            //string json;
+            //try
+            //{
+            //    var argObj = Utils.ParseMsgArg(returnValue);
+            //    json = Utils.Serialize(argObj);
+            //}
+            //catch (InvalidDataException)
+            //{
+            //    errorCB(QStatus.BUS_CANNOT_EXPAND_MESSAGE);
+            //    return;
+            //}
 
-            successCB(json);
+            //successCB(json);
         }
 
         public static void proxyBusObjectGetAllProperties(CordovaSuccessCallback successCB, CordovaErrorCallback errorCB, [ReadOnlyArray] String[] args)
@@ -245,26 +245,26 @@ namespace MSOpenTech.AllJoyn
             var interfaceName = args.GetArg(2);
             var returnValue = new MsgArg();
 
-            var result = proxy.GetAllProperties(interfaceName, returnValue);
-            if (!result)
-            {
-                errorCB(result);
-                return;
-            }
+            //var result = proxy.GetAllProperties(interfaceName, returnValue);
+            //if (!result)
+            //{
+            //    errorCB(result);
+            //    return;
+            //}
 
-            string json;
-            try
-            {
-                var argObj = Utils.ParseMsgArg(returnValue);
-                json = Utils.Serialize(argObj);
-            }
-            catch (InvalidDataException)
-            {
-                errorCB(QStatus.BUS_CANNOT_EXPAND_MESSAGE);
-                return;
-            }
+            //string json;
+            //try
+            //{
+            //    var argObj = Utils.ParseMsgArg(returnValue);
+            //    json = Utils.Serialize(argObj);
+            //}
+            //catch (InvalidDataException)
+            //{
+            //    errorCB(QStatus.BUS_CANNOT_EXPAND_MESSAGE);
+            //    return;
+            //}
 
-            successCB(json);
+            //successCB(json);
         }
 
         public static void proxyBusObjectSetProperty(CordovaSuccessCallback successCB, CordovaErrorCallback errorCB, [ReadOnlyArray] String[] args)
@@ -307,12 +307,12 @@ namespace MSOpenTech.AllJoyn
 
             Debug.WriteLine("propertyValue created {0}: signature:{1} ", propertyValue, propertyValue.Signature);
 
-            var result = proxy.SetProperty(interfaceName, propertyName, propertyValue);
-            if (!result)
-            {
-                errorCB(result);
-                return;
-            }
+            //var result = 0;// proxy.SetProperty(interfaceName, propertyName, propertyValue);
+            //if (!result)
+            //{
+            //    errorCB(result);
+            //    return;
+            //}
 
             successCB(string.Empty);
         }
