@@ -65,7 +65,7 @@ var app = {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
 
 
-        	interfaceDesc.addMethod("getParamValue", "", "d", "paramValue");
+        	interfaceDesc.addMethod("getParamValue", "s", "s", "paramName,paramValue");
                         
             interfaceDesc.activate(function () {
                 app.log("Interface " + INTERFACE_NAME + " Activated successfully");
@@ -168,19 +168,19 @@ var app = {
     },
 
     pollStatus: function() {
-        setTimeout(function () {
+        setInterval(function () {
 
             //app.proxyBusObject.getProperty(function (res) {
             //    console.log('Currrent humidity: ' + res);
             //}, app.fail("Unable to get property"), "com.akvelon.gardener", 'humidity');
 
             app.proxyBusObject.methodCall(function (res) {
-                console.log('Currrent humidity: ' + res);
-            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
+                console.log('Currrent humidity: ' + JSON.stringify(res));
+            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['soil_humidity']);
 
-            app.proxyBusObject.methodCall(function (res) {
-                console.log('Currrent humidity: ' + res);
-            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
+            //app.proxyBusObject.methodCall(function (res) {
+            //    console.log('Currrent humidity: ' + res);
+            //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
 
             //app.proxyBusObject.methodCall(function (res) {
             //    console.log('Currrent humidity: ' + res);
@@ -190,7 +190,7 @@ var app = {
             //    console.log('Currrent solarFlow: ' + res);
             //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'solarFlow', []);
 
-        }, 500);
+        }, 2000);
     },
 
     // Update DOM on a Received Event
