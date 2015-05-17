@@ -9,7 +9,7 @@ function Board() {
     var that = this;
     setTimeout(function () {
         that.emit('ready');
-    }, 500);
+    }, 2000);
 }
 
 util.inherits(Board, events.EventEmitter);

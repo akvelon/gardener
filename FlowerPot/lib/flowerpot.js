@@ -5,9 +5,9 @@ var EMULATE_SENSORS = process.argv.indexOf('--emulate') > 0;
 
 var Five = require('johnny-five');
 if (EMULATE_SENSORS) {
-    Five = require('./lib/johnny-five');
+    Five = require('./johnny-five');
 }
-var FlowerDatabase = require('./flower_database.js');
+var flowerDatabase = require('./flower_database');
 
 function Pot(onReady, flowerName) {
     var board = new Five.Board();
@@ -43,7 +43,7 @@ function Pot(onReady, flowerName) {
     var updateFlowerHealth = function() {
         var result = 5;
         that.recommendations = [];
-        var recommendedParameters = FlowerDatabase.recommendedParameters[flowerName];
+        var recommendedParameters = flowerDatabase[that.flowerName];
         for (var parameterName in that.flowerVitalParameters) {
             var vitalParam = that.flowerVitalParameters[parameterName];
             var recommendedParam = recommendedParameters[parameterName];
