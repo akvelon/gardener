@@ -1,13 +1,17 @@
 
 /*jshint node: true*/
 
-var emitter = new require('events').EventEmitter();
+var events = require('events');
+var util = require('util');
 
 function Board() {
+    events.EventEmitter.call(this);
     setTimeout(function () {
-        emitter.emit('ready');
+        this.emit('ready');
     }, 500);
 }
+
+util.inherits(Board, events.EventEmitter);
 
 function Pin (name) {
     return {
