@@ -65,9 +65,9 @@
   <ItemGroup>
     <SDKReference Include="Microsoft.WinJS.2.0, Version=1.0" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\plugins\com.msopentech.allJoyn\src\windows\MSOpenTech.AllJoyn\MSOpenTech.AllJoyn.csproj" />
+  </ItemGroup>
   <Import Label="Shared" Project="CordovaApp.projitems" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
-  <ItemGroup>
-    <ProjectReference Include="D:\Projects\Akvelon\git\gardener\CordovaApp\plugins\com.msopentech.allJoyn\src\windows\MSOpenTech.AllJoyn\MSOpenTech.AllJoyn.csproj" />
-  </ItemGroup>
 </Project>
