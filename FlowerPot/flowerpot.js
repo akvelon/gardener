@@ -1,14 +1,32 @@
 
 /*jshint node: true*/
 
-exports.Pot = function(onReady, flowerName) {
-    var five = require('johnny-five');
-    var board = new five.Board();
-    var FlowerDatabase = require('./flower_database.js');
-    var flowerHealth;
-    var recommendations = [];
+var Five = require('johnny-five');
+var FlowerDatabase = require('./flower_database.js');
 
-    flowerName = typeof(flowerName) !== 'undefined' ? flowerName : 'general';
+function Pot(onReady, flowerName) {
+    var board = new Five.Board();
+
+    this.flowerHealth = undefined;
+    this.flowerName = flowerName || 'general';
+    this.flowerVitalParameters = {
+        'illuminance': {
+            humanReadable: "Illuminance",
+            unit: "%",
+            pinName: "A1",
+            update: function(state){
+                flowerVitalParameters["illuminance"].value = 100 - state.value * 100 / 1024;
+            }},
+        'soil_humidity': {
+            humanReadable: "Soil humidity",
+            unit: "%",
+            pinName: "A0",
+            update: function(state){
+                flowerVitalParameters["soil_humidity"].value = state.value * 100 / 950;
+            }
+        }
+    };
+    this.recommendations = [];
 
     var updateVitalParameters = function() {
         for(var parameter in flowerVitalParameters) {
@@ -16,11 +34,36 @@ exports.Pot = function(onReady, flowerName) {
         }
     };
 
+    var that = this;
+    var updateFlowerHealth = function() {
+        var result = 5;
+        that.recommendations = [];
+        var recommendedParameters = FlowerDatabase.recommendedParameters[flowerName];
+        for (var parameterName in that.flowerVitalParameters) {
+            var value = that.flowerVitalParameters[parameterName].value;
+            var unit =  that.flowerVitalParameters[parameterName].unit;
+            var humanReadable = that.flowerVitalParameters[parameterName].humanReadable;
+            if(value < recommendedParameters[parameterName].min) {
+                that.recommendations.push({
+                    message: humanReadable + " (" + value + unit + ") less than recommended (" + recommendedParameters[parameterName].min + unit + "). "
+                });
+                result = result - recommendedParameters[parameterName].weight;
+            } else if(value > recommendedParameters[parameterName].max) {
+                that.recommendations.push({
+                    message: humanReadable + " (" + value + unit + ") greater than recommended (" + recommendedParameters[parameterName].max + unit + "). "
+                });
+                result = result - recommendedParameters[parameterName].weight;
+            }
+        }
+        that.flowerHealth = result;
+    };
+
     board.on('ready', function(){
         console.log('Flower pot initialized');
 
+        // Bind parameters to sensors. Create Pin object for each parameter.
         for (var parameter in flowerVitalParameters) {
-            flowerVitalParameters[parameter].pinObject = new five.Pin(flowerVitalParameters[parameter].pinName);
+            flowerVitalParameters[parameter].pinObject = new Five.Pin(flowerVitalParameters[parameter].pinName);
         }
 
         setInterval(updateVitalParameters, 1000);
@@ -30,65 +73,26 @@ exports.Pot = function(onReady, flowerName) {
             onReady();
         }
     });
+}
 
-    var recommendedParameters = FlowerDatabase.recommendedParameters[flowerName];
-
-    var updateFlowerHealth = function() {
-        var result = 5;
-        recommendations = [];
-        for (var parameterName in flowerVitalParameters) {
-            var value = flowerVitalParameters[parameterName].value;
-            var unit =  flowerVitalParameters[parameterName].unit;
-            var humanReadable = flowerVitalParameters[parameterName].humanReadable;
-            if(value < recommendedParameters[parameterName].min) {
-                recommendations.push({
-                    message: humanReadable + " (" + value + unit + ") less than recommended (" + recommendedParameters[parameterName].min + unit + "). "
-                });
-                result = result - recommendedParameters[parameterName].weight;
-            } else if(value > recommendedParameters[parameterName].max) {
-                recommendations.push({
-                    message: humanReadable + " (" + value + unit + ") greater than recommended (" + recommendedParameters[parameterName].max + unit + "). "
-                });
-                result = result - recommendedParameters[parameterName].weight;
-            }
-        }
-        flowerHealth = result;
-    };
-
-    this.getFlowerName = function() {
-        return flowerName;
-    };
-
-    this.getFlowerVitalParameter = function(name) {
-        return flowerVitalParameters[name].value;
-    };
-
-    this.getFlowerVitalParameters = function() {
-        return flowerVitalParameters;
-    };
-
-    this.getRecommendations = function() {
-        return recommendations;
-    };
-
-    this.getFlowerHealth = function() {
-        return flowerHealth;
-    };
-
-    var flowerVitalParameters = {
-    'illuminance': {
-        humanReadable: "Illuminance",
-        unit: "%",
-        pinName: "A1",
-        update: function(state){
-            flowerVitalParameters["illuminance"].value = 100 - state.value * 100 / 1024;
-        }},
-    'soil_humidity': {
-        humanReadable: "Soil humidity",
-        unit: "%",
-        pinName: "A0",
-        update: function(state){
-            flowerVitalParameters["soil_humidity"].value = state.value * 100 / 950;
-        }}
-    };
+Pot.prototype.getFlowerName = function() {
+    return this.flowerName;
 };
+
+Pot.prototype.getFlowerVitalParameter = function(name) {
+    return this.flowerVitalParameters[name].value;
+};
+
+Pot.prototype.getFlowerVitalParameters = function() {
+    return this.flowerVitalParameters;
+};
+
+Pot.prototype.getRecommendations = function() {
+    return this.recommendations;
+};
+
+Pot.prototype.getFlowerHealth = function() {
+    return this.flowerHealth;
+};
+
+module.exports.Pot = Pot;
