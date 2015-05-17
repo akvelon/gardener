@@ -11,6 +11,7 @@ var FlowerDatabase = require('./flower_database.js');
 
 function Pot(onReady, flowerName) {
     var board = new Five.Board();
+    var that = this;
 
     this.flowerHealth = undefined;
     this.flowerName = flowerName || 'general';
@@ -20,26 +21,25 @@ function Pot(onReady, flowerName) {
             unit: "%",
             pinName: "A1",
             update: function(state){
-                flowerVitalParameters["illuminance"].value = 100 - state.value * 100 / 1024;
+                that.flowerVitalParameters["illuminance"].value = 100 - state.value * 100 / 1024;
             }},
         'soil_humidity': {
             humanReadable: "Soil humidity",
             unit: "%",
             pinName: "A0",
             update: function(state){
-                flowerVitalParameters["soil_humidity"].value = state.value * 100 / 950;
+                that.flowerVitalParameters["soil_humidity"].value = state.value * 100 / 950;
             }
         }
     };
     this.recommendations = [];
 
     var updateVitalParameters = function() {
-        for(var parameter in flowerVitalParameters) {
-            flowerVitalParameters[parameter].pinObject.query(flowerVitalParameters[parameter].update);
+        for(var parameter in that.flowerVitalParameters) {
+            that.flowerVitalParameters[parameter].pinObject.query(that.flowerVitalParameters[parameter].update);
         }
     };
 
-    var that = this;
     var updateFlowerHealth = function() {
         var result = 5;
         that.recommendations = [];
@@ -70,8 +70,8 @@ function Pot(onReady, flowerName) {
         console.log('Flower pot initialized');
 
         // Bind parameters to sensors. Create Pin object for each parameter.
-        for (var parameter in flowerVitalParameters) {
-            flowerVitalParameters[parameter].pinObject = new Five.Pin(flowerVitalParameters[parameter].pinName);
+        for (var parameter in that.flowerVitalParameters) {
+            that.flowerVitalParameters[parameter].pinObject = new Five.Pin(that.flowerVitalParameters[parameter].pinName);
         }
 
         setInterval(updateVitalParameters, 1000);

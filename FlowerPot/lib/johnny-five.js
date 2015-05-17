@@ -6,8 +6,9 @@ var util = require('util');
 
 function Board() {
     events.EventEmitter.call(this);
+    var that = this;
     setTimeout(function () {
-        this.emit('ready');
+        that.emit('ready');
     }, 500);
 }
 
