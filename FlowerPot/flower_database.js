@@ -1,4 +1,3 @@
-'use strict'
 var recommendedParameters = {
     general: {
 	soil_humidity: {
@@ -44,5 +43,6 @@ var recommendedParameters = {
 	    weight: 1
 	}
     },
-}
-exports.recommendedParameters = recommendedParameters;
+};
+
+module.exports.recommendedParameters = recommendedParameters;
