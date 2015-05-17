@@ -1,7 +1,10 @@
+#!/usr/bin/env node
 'use strict';
 var flowerPot = require("./flowerpot.js");
-var pot1 = new flowerPot.Pot(0);
+var pot1 = new flowerPot.Pot(
 
+
+function(){
 setInterval(function(){	
     console.log("Flower name: " + pot1.getFlowerName());
     console.log("Flower health: " + pot1.getFlowerHealth());
@@ -14,4 +17,5 @@ setInterval(function(){
     for(var index in recommendations) {
 	console.log(recommendations[index].message);
     }
-}, 1000);
+}, 1000)
+});

@@ -1,42 +1,39 @@
 'use strict';
-exports.Pot = function(deviceIndex, flowerName) {
+exports.Pot = function(onReady, flowerName) {
+    var five = require('johnny-five');
+    var board = new five.Board();
     var FlowerDatabase = require('./flower_database.js');
-    var SerialPort = require("serialport").SerialPort
     var flowerHealth;        
     var recommendations = [];
-
     flowerName = typeof(flowerName) !== 'undefined' ? flowerName : 'general';
 
-    if(typeof(deviceIndex)==='undefined') {
-	console.error('Device index not defined. Exiting.');
-	process.exit(1);
-    }
+    var updateVitalParameters = function() {
+	for(var parameter in flowerVitalParameters) {
+	    flowerVitalParameters[parameter].pinObject.query(flowerVitalParameters[parameter].update);
+	}
+    };    
 
-    var port = new SerialPort('/dev/ttyACM' + deviceIndex, {
-	 baudrate: 9600
+    board.on('ready', function(){
+	console.log('Flower pot initialized');
+
+	for(var parameter in flowerVitalParameters) {
+	    flowerVitalParameters[parameter].pinObject = new five.Pin(flowerVitalParameters[parameter].pinName);
+	}
+
+	setInterval(updateVitalParameters, 1000);
+	setInterval(updateFlowerHealth, 1000);
+
+	if(typeof(onReady === 'function')) {
+	    onReady();
+	}
     });
 
-    var portLocked = false;
-
     var recommendedParameters = FlowerDatabase.recommendedParameters[flowerName];
-    var updateVitalParameter = function(parameterName) {
-	if(!portLocked) {
-	    portLocked = true;
-	    port.write('GET ' + parameterName +"\n", function(err, results) {
-		flowerVitalParameters[parameterName].value = Number(results);
-		portLocked = false;
-	    });
-	} else {
-	    setTimeout(function(){
-		updateVitalParameter(parameterName);
-	    }, 50);
-	}
-    }
 
     var updateFlowerHealth = function() {
 	var result = 5;
 	recommendations = [];
-	for (parameterName in flowerVitalParameters) {
+	for (var parameterName in flowerVitalParameters) {
 	    var value = flowerVitalParameters[parameterName].value;
 	    var unit =  flowerVitalParameters[parameterName].unit;
 	    var humanReadable = flowerVitalParameters[parameterName].humanReadable;
@@ -76,47 +73,16 @@ exports.Pot = function(deviceIndex, flowerName) {
     }
 
     var flowerVitalParameters = {
-	'light': {
+	'illuminance': {
 	    humanReadable: "Illuminance", 
 	    unit: "%", 
-	    value: 0, 
-	    interval: 1000, 
-	    update: function(){updateVitalParameter('light')}},
-	'air_temperature': {
-	    humanReadable: "Air temperature", 
-	    unit: "C", 
-	    value: 0, 
-	    interval: 1000, 
-	    update: function(){updateVitalParameter('air_temperature')}},
-	'air_humidity': {
-	    humanReadable: "Air humidity", 
-	    unit: "%", 
-	    value: 0, 
-	    interval: 1000, 
-	    update: function(){updateVitalParameter('air_humidity')}},
+	    pinName: "A1",
+	    update: function(state){flowerVitalParameters["illuminance"].value = 100 - state.value * 100 / 1024}},
 	'soil_humidity': {
 	    humanReadable: "Soil humidity", 
 	    unit: "%", 
-	    value: 0, 
-	    interval: 1000, 
-	    update: function(){updateVitalParameter('soil_humidity')}}
+	    pinName: "A0",
+	    update: function(state){flowerVitalParameters["soil_humidity"].value = state.value * 100 / 950}}
     };
 
-    if(typeof(deviceIndex)==='undefined') {
-	console.error('Device index not defined. Exiting.');
-	process.exit(1);
-    }
-
-    var port = new SerialPort('/dev/ttyACM' + deviceIndex, {
-	 baudrate: 9600
-    });
-
-    var portLocked = false;
-
-    for(var parameterName in flowerVitalParameters) {
-	setInterval(flowerVitalParameters[parameterName].update, flowerVitalParameters[parameterName].interval)
-    }	
-    setInterval(updateFlowerHealth, 1000);
 }
-
-

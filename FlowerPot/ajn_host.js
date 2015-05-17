@@ -1,6 +1,6 @@
+#!/usr/bin/env node
 var alljoyn = require('alljoyn');
 var flowerPot = require("./flowerpot.js");
-var pot1 = new flowerPot.Pot(0);
 
 var sessionId = 0;
 var portNumber = 25;
@@ -22,7 +22,6 @@ console.log('Starting service ' + advertisedName);
 
 var bus = alljoyn.BusAttachment("host");
 var inter = alljoyn.InterfaceDescription();
-
 
 var listener = alljoyn.BusListener(
   function(name){
@@ -49,44 +48,47 @@ var portListener = alljoyn.SessionPortListener(
   }
 );
 
-console.log("CreateInterface "+ bus.createInterface(interfaceName, inter));
-console.log("Add method " + inter.addMethod("getParamValue", "s",  "s", "paramName,paramValue", 0));
+var pot1 = new flowerPot.Pot(function(){
 
-bus.registerBusListener(listener);
+    console.log("CreateInterface "+ bus.createInterface(interfaceName, inter));
+    console.log("Add method " + inter.addMethod("getParamValue", "s",  "s", "paramName,paramValue", 0));
 
-console.log("Start "+bus.start());
-var chatObject = alljoyn.BusObject(interfacePath);
-console.log("chat.AddInterface "+chatObject.addInterface(inter));
+    bus.registerBusListener(listener);
 
-console.log("chat.addMethodHandler "+chatObject.addMethodHandler(inter, 'getParamValue', function(args, msg){
-  getParamValue(args['0'], chatObject, msg);
-}));
+    console.log("Start "+bus.start());
+    var chatObject = alljoyn.BusObject(interfacePath);
+    console.log("chat.AddInterface "+chatObject.addInterface(inter));
+    
+    console.log("chat.addMethodHandler "+chatObject.addMethodHandler(inter, 'getParamValue', function(args, msg){
+      getParamValue(args['0'], chatObject, msg);
+    }));
 
-console.log("RegisterBusObject "+bus.registerBusObject(chatObject));
-console.log("Connect "+bus.connect());
+    console.log("RegisterBusObject "+bus.registerBusObject(chatObject));
+    console.log("Connect "+bus.connect());
+    
+    console.log("RequestName "+bus.requestName(advertisedName));
+    console.log("BindSessionPort "+bus.bindSessionPort(portNumber, portListener));
+    console.log("AdvertiseName "+bus.advertiseName(advertisedName));
 
-console.log("RequestName "+bus.requestName(advertisedName));
-console.log("BindSessionPort "+bus.bindSessionPort(portNumber, portListener));
-console.log("AdvertiseName "+bus.advertiseName(advertisedName));
+    // Added Chat to example
+    var stdin = process.stdin;
 
-// Added Chat to example
-var stdin = process.stdin;
+    // without this, we would only get streams once enter is pressed
+    stdin.setRawMode( true );
 
-// without this, we would only get streams once enter is pressed
-stdin.setRawMode( true );
+    // resume stdin in the parent process (node app won't quit all by itself
+    // unless an error or process.exit() happens)
+    stdin.resume();
 
-// resume stdin in the parent process (node app won't quit all by itself
-// unless an error or process.exit() happens)
-stdin.resume();
+    // i don't want binary, do you?
+    stdin.setEncoding( 'utf8' );
 
-// i don't want binary, do you?
-stdin.setEncoding( 'utf8' );
-
-// on any data into stdin
-stdin.on( 'data', function( key ){
-  // ctrl-c ( end of text )
-  //if ( key === '\u0003' ) {
-    process.exit();
-  //}
-  //process.stdout.write( key + '\n' );
+    // on any data into stdin
+    stdin.on( 'data', function( key ){
+      // ctrl-c ( end of text )
+      //if ( key === '\u0003' ) {
+	process.exit();
+      //}
+      //process.stdout.write( key + '\n' );
+    });
 });

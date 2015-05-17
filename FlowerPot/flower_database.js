@@ -16,7 +16,7 @@ var recommendedParameters = {
 	    max: 35,
 	    weight: 1
 	},
-	light: {
+	illuminance: {
 	    min: 50,
 	    max: 90,
 	    weight: 1
@@ -38,7 +38,7 @@ var recommendedParameters = {
 	    max: 35,
 	    weight: 1
 	},
-	light: {
+	illuminance: {
 	    min: 50,
 	    max: 90,
 	    weight: 1
