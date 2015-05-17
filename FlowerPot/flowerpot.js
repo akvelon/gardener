@@ -1,7 +1,12 @@
 
 /*jshint node: true*/
 
+var EMULATE_SENSORS = process.argv.indexOf('--emulate') > 0;
+
 var Five = require('johnny-five');
+if (EMULATE_SENSORS) {
+    Five = require('./lib/johnny-five');
+}
 var FlowerDatabase = require('./flower_database.js');
 
 function Pot(onReady, flowerName) {
@@ -40,19 +45,22 @@ function Pot(onReady, flowerName) {
         that.recommendations = [];
         var recommendedParameters = FlowerDatabase.recommendedParameters[flowerName];
         for (var parameterName in that.flowerVitalParameters) {
-            var value = that.flowerVitalParameters[parameterName].value;
-            var unit =  that.flowerVitalParameters[parameterName].unit;
-            var humanReadable = that.flowerVitalParameters[parameterName].humanReadable;
-            if(value < recommendedParameters[parameterName].min) {
+            var vitalParam = that.flowerVitalParameters[parameterName];
+            var recommendedParam = recommendedParameters[parameterName];
+
+            var value = vitalParam.value;
+            var unit =  vitalParam.unit;
+            var humanReadable = vitalParam.humanReadable;
+            if(value < recommendedParam.min) {
                 that.recommendations.push({
-                    message: humanReadable + " (" + value + unit + ") less than recommended (" + recommendedParameters[parameterName].min + unit + "). "
+                    message: humanReadable + " (" + value + unit + ") less than recommended (" + recommendedParam.min + unit + "). "
                 });
-                result = result - recommendedParameters[parameterName].weight;
-            } else if(value > recommendedParameters[parameterName].max) {
+                result = result - recommendedParam.weight;
+            } else if(value > recommendedParam.max) {
                 that.recommendations.push({
-                    message: humanReadable + " (" + value + unit + ") greater than recommended (" + recommendedParameters[parameterName].max + unit + "). "
+                    message: humanReadable + " (" + value + unit + ") greater than recommended (" + recommendedParam.max + unit + "). "
                 });
-                result = result - recommendedParameters[parameterName].weight;
+                result = result - recommendedParam.weight;
             }
         }
         that.flowerHealth = result;
