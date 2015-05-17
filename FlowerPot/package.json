@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/akvelon/gardener",
   "dependencies": {
-    "alljoyn": "https://github.com/sgrebnov/alljoyn.git",
+    "alljoyn": "git://github.com/sgrebnov/alljoyn",
     "applicationinsights": "^0.15",
     "johnny-five": "^0.8"
   }
