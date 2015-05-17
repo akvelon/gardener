@@ -14,7 +14,7 @@ Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "CordovaApp.Windows", "Cordo
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "CordovaApp.Phone", "CordovaApp.Phone.jsproj", "{31B67A35-9503-4213-857E-F44EB42AE549}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSOpenTech.AllJoyn", "D:\Projects\Akvelon\git\gardener\CordovaApp\plugins\com.msopentech.allJoyn\src\windows\MSOpenTech.AllJoyn\MSOpenTech.AllJoyn.csproj", "{E3707D40-D9F1-4C3C-86B1-EBAAE1754D5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSOpenTech.AllJoyn", "..\..\plugins\com.msopentech.allJoyn\src\windows\MSOpenTech.AllJoyn\MSOpenTech.AllJoyn.csproj", "{E3707D40-D9F1-4C3C-86B1-EBAAE1754D5F}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -105,5 +105,6 @@ Global
 		{9EBDB27F-D75B-4D8C-B53F-7BE4A1FE89F9} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 		{58950FB6-2F93-4963-B9CD-637F83F3EFBF} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 		{31B67A35-9503-4213-857E-F44EB42AE549} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
+		{E3707D40-D9F1-4C3C-86B1-EBAAE1754D5F} = {3A47E08D-7EA5-4F3F-AA6D-1D4A41F26944}
 	EndGlobalSection
 EndGlobal
