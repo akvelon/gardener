@@ -2,7 +2,7 @@
   "name": "FlowerPot",
   "version": "0.0.1",
   "description": "FlowerPot monitoring service",
-  "main": "ajn_host.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,8 +17,11 @@
   },
   "homepage": "https://github.com/akvelon/gardener",
   "dependencies": {
-    "alljoyn": "https://github.com/sgrebnov/alljoyn.git",
+    "alljoyn": "git://github.com/sgrebnov/alljoyn",
     "applicationinsights": "^0.15",
     "johnny-five": "^0.8"
+  },
+  "scripts": {
+    "debug": "node main.js --emulate --debug"
   }
 }

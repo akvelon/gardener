@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 var alljoyn = require('alljoyn');
 var AppInsights = require("applicationinsights");
-var flowerPot = require("./flowerpot.js");
+var flowerPot = require("./lib/flowerpot.js");
 
 var sessionId = 0;
 var portNumber = 25;
