@@ -25,5 +25,23 @@ function Pin (name) {
     };
 }
 
+function Servo (name) {
+    return {
+        to:function () {
+        }
+    };
+}
+
+function Led (name) {
+    return {
+        on:function () {
+        },
+        off:function () {
+        }
+    };
+}
+
 module.exports.Board = Board;
 module.exports.Pin = Pin;
+module.exports.Servo = Servo;
+module.exports.Led = Led;

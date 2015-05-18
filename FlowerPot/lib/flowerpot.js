@@ -3,6 +3,16 @@
 
 var EMULATE_SENSORS = process.argv.indexOf('--emulate') > 0;
 
+var SPRINCLE_SERVO_PIN = 9;
+var SPRINCLE_SERVO_MIN = 30;
+var SPRINCLE_SERVO_MAX = 50;
+var SPRINCLE_TIMEOUT = 2000;
+
+var LED_LIGHT_PIN = 10;
+var LED_R_PIN = 11;
+var LED_G_PIN = 12;
+var LED_B_PIN = 13;
+
 var Five = require('johnny-five');
 if (EMULATE_SENSORS) {
     Five = require('./johnny-five');
@@ -11,6 +21,7 @@ var flowerDatabase = require('./flower_database');
 
 function Pot(onReady, flowerName) {
     var board = new Five.Board();
+
     var that = this;
 
     this.flowerHealth = undefined;
@@ -69,6 +80,9 @@ function Pot(onReady, flowerName) {
     board.on('ready', function(){
         console.log('Flower pot initialized');
 
+        that.sprincleServo = new Five.Servo(SPRINCLE_SERVO_PIN);
+        that.sprincleServo.to(SPRINCLE_SERVO_MIN);
+
         // Bind parameters to sensors. Create Pin object for each parameter.
         for (var parameter in that.flowerVitalParameters) {
             that.flowerVitalParameters[parameter].pinObject = new Five.Pin(that.flowerVitalParameters[parameter].pinName);
@@ -102,5 +116,13 @@ Pot.prototype.getRecommendations = function() {
 Pot.prototype.getFlowerHealth = function() {
     return this.flowerHealth;
 };
+
+Pot.prototype.sprincleFlower = function() {
+    var servo = this.sprincleServo;
+    servo.to(SPRINCLE_SERVO_MAX);
+    setTimeout(function(){
+        servo.to(SPRINCLE_SERVO_MIN);
+    }, SPRINCLE_TIMEOUT);
+}
 
 module.exports.Pot = Pot;
