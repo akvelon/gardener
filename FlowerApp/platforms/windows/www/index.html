@@ -25,14 +25,26 @@
         <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <link rel="stylesheet" type="text/css" href="css/topcoat-mobile-dark.css" />
         <title>Hello World</title>
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
+            <div class="topcoat-button-bar blink full center" id="deviceready">
                 <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
+            </div>
+            <div class="topcoat-list__container scroller">
+                <ul class="topcoat-list list" id="userlist">
+                    <li class="topcoat-list__item list__item">
+                        <p>Soil humidity</p>
+                        <input type="text" class="topcoat-text-input" id="soil" value="100"/>
+                    </li>
+                    <li class="topcoat-list__item list__item">
+                        <p>Light</p>
+                        <input type="text" class="topcoat-text-input" id="light" value="200"/>
+                    </li>
+                </ul>
             </div>
             <div class="log">
                 <textarea id="log"></textarea>
