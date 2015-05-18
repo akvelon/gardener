@@ -23,8 +23,6 @@ var SERVICE_NAME = "org.alljoyn.Bus.sample";
 var BUS_NAME = "cordova.gardener." + cordova.platformId;
 var SERVICE_PATH = "/sample";
 var SERVICE_PORT = 25;
-
-
 var CONNECT_SPEC = null;//"tcp:addr=gardener,port=9955";
 
 var app = {
@@ -33,13 +31,6 @@ var app = {
 
     // Application Constructor
     initialize: function() {
-        this.bindEvents();
-    },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
-    bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
     // deviceready Event Handler
@@ -52,7 +43,6 @@ var app = {
 
         BusAttachment.create(function (busAttachment) {
             app.busAttachment = busAttachment;
-
             app.createInterface(function () {
                 app.startBusAndConnect(null, app.fail("Failed to start/connect BusAttachment"));
             }, app.fail("Failed to create intreface at local BusAttachment"));
@@ -63,10 +53,7 @@ var app = {
     createInterface: function (successCallback, errorCallback) {
         app.busAttachment.createInterface(function (interfaceDesc) {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
-
-
         	interfaceDesc.addMethod("getParamValue", "s", "s", "paramName,paramValue");
-                        
             interfaceDesc.activate(function () {
                 app.log("Interface " + INTERFACE_NAME + " Activated successfully");
                 successCallback(interfaceDesc);
@@ -79,11 +66,9 @@ var app = {
         app.busAttachment.start(function () {
             app.busAttachment.connect(function () {
                 app.busAttachment.addEventListener('foundAdvertisedName', app.advertisedNameFound(app.busAttachment));
-
                 app.busAttachment.findAdvertisedName(function () {
                     app.log("BusAttachment  " + BUS_NAME + " created, looking for advertised name: " + INTERFACE_NAME);
                 }, errorCallback, INTERFACE_NAME);
-              
             }, errorCallback, CONNECT_SPEC);
         }, errorCallback);
     },
@@ -91,30 +76,20 @@ var app = {
     // Event handler for foundAdvertisedName event. Joins an existing session if any, and tries to call a remote method
     advertisedNameFound: function (busAttachment) {
 
-        // Initialize shortcuts to AllJoyn objects
-        var SessionOpts = msopentech.alljoyn.SessionOpts;
-        var TransportMask = msopentech.alljoyn.TransportMask;
-
-        var opts = new SessionOpts(SessionOpts.TrafficType.TRAFFIC_MESSAGES,
-            false, SessionOpts.Proximity.PROXIMITY_ANY, TransportMask.TRANSPORT_ANY);
-
         var advertisedNameFoundHandler = function advertisedNameFoundHandler(host) {
-
             busAttachment.removeEventListener('foundAdvertisedName', advertisedNameFoundHandler);
-
             console.log('Advertised name has been found: ' + host);
+            console.log('Ready to poll service.');
+            app.SERVICE = host;
+            app.busAttachment.getInterfaces(function (interfaces) {
+                app.remoteInterface = interfaces
+                .filter(function (iface) {
+                    return iface.name === INTERFACE_NAME;
+                })[0];
 
-            busAttachment.joinSession(function (sessionId) {
-                busAttachment.addEventListener('sessionLost', function (sessionId, reason) {
-                    app.log("Lost session " + sessionId + ", reason: " + reason);
-                }, sessionId);
 
-                app.log('Joined session ' + sessionId);
-                app.createProxyBusObject(busAttachment, sessionId, function(proxyBusObject) {
-                    app.proxyBusObject = proxyBusObject;
-                    app.receivedEvent('deviceready');
-                });
-            }, app.fail("Failed to join session"), host, SERVICE_PORT, opts);
+                app.receivedEvent('deviceready');
+            }, app.fail('Failed to get remote interfaces'));
         };
 
         // return actual handler for advertisedNameFound event
@@ -128,17 +103,10 @@ var app = {
         var ProxyBusObject = msopentech.alljoyn.ProxyBusObject;
 
         ProxyBusObject.create(function (proxy) {
-            busAttachment.getInterfaces(function(interfaces) {
-                var remoteInterface = interfaces.filter(function (iface) {
-                    return iface.name === INTERFACE_NAME;
-                })[0];
-
-                proxy.addInterface(function () {
-                    app.log("Successfully added interface to proxy");
-                    successCallback(proxy);
-                }, errorCallback, remoteInterface);
-
-            }, errorCallback);
+            proxy.addInterface(function () {
+                app.log("Successfully added interface to proxy");
+                successCallback(proxy);
+            }, errorCallback, app.remoteInterface);
         }, errorCallback, busAttachment, SERVICE_NAME, SERVICE_PATH, sessionId);
     },
 
@@ -167,29 +135,27 @@ var app = {
         }
     },
 
-    pollStatus: function() {
+    pollStatus: function () {
+        // Initialize shortcuts to AllJoyn objects
+        var SessionOpts = msopentech.alljoyn.SessionOpts;
+        var TransportMask = msopentech.alljoyn.TransportMask;
+
+        var opts = new SessionOpts(SessionOpts.TrafficType.TRAFFIC_MESSAGES,
+            false, SessionOpts.Proximity.PROXIMITY_ANY, TransportMask.TRANSPORT_ANY);
+
         setInterval(function () {
-
-            //app.proxyBusObject.getProperty(function (res) {
-            //    console.log('Currrent humidity: ' + res);
-            //}, app.fail("Unable to get property"), "com.akvelon.gardener", 'humidity');
-
-            app.proxyBusObject.methodCall(function (res) {
-                console.log('Currrent humidity: ' + JSON.stringify(res));
-            }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['soil_humidity']);
-
-            //app.proxyBusObject.methodCall(function (res) {
-            //    console.log('Currrent humidity: ' + res);
-            //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', []);
-
-            //app.proxyBusObject.methodCall(function (res) {
-            //    console.log('Currrent humidity: ' + res);
-            //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['solarFlow']);
-
-            //app.proxyBusObject.methodCall(function (res) {
-            //    console.log('Currrent solarFlow: ' + res);
-            //}, app.fail("Failed to call remote method "), INTERFACE_NAME, 'solarFlow', []);
-
+            app.busAttachment.joinSession(function (sessionId) {
+                app.log('Joined session ' + sessionId);
+                app.createProxyBusObject(app.busAttachment, sessionId, function (proxyBusObject) {
+                    app.proxyBusObject = proxyBusObject;
+                    app.proxyBusObject.methodCall(function (res) {
+                        console.log('Currrent humidity: ' + JSON.stringify(res));
+                        app.busAttachment.leaveSession(function () {
+                            app.log('Left session');
+                        }, app.fail("Failed to left session"), sessionId);
+                    }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['soil_humidity']);
+                }, app.fail("Failed to create proxyBusObject"));
+            }, app.fail("Failed to join session"), app.SERVICE, SERVICE_PORT, opts);
         }, 2000);
     },
 
@@ -205,7 +171,6 @@ var app = {
         console.log('Received Event: ' + id);
 
         app.pollStatus();
-        
     }
 };
 
