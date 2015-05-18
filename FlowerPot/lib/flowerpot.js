@@ -83,6 +83,11 @@ function Pot(onReady, flowerName) {
         that.sprincleServo = new Five.Servo(SPRINCLE_SERVO_PIN);
         that.sprincleServo.to(SPRINCLE_SERVO_MIN);
 
+        that.ledLight = new Five.Led(LED_LIGHT_PIN);
+        that.ledR = new Five.Led(LED_R_PIN);
+        that.ledG = new Five.Led(LED_G_PIN);
+        that.ledB = new Five.Led(LED_B_PIN);
+
         // Bind parameters to sensors. Create Pin object for each parameter.
         for (var parameter in that.flowerVitalParameters) {
             that.flowerVitalParameters[parameter].pinObject = new Five.Pin(that.flowerVitalParameters[parameter].pinName);
@@ -123,6 +128,14 @@ Pot.prototype.sprincleFlower = function() {
     setTimeout(function(){
         servo.to(SPRINCLE_SERVO_MIN);
     }, SPRINCLE_TIMEOUT);
+}
+
+Pot.prototype.lightOn = function() {
+    this.ledLight.on();
+}
+
+Pot.prototype.lightOff = function() {
+    this.ledLight.off();
 }
 
 module.exports.Pot = Pot;
