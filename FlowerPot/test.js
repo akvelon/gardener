@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-var flowerPot = require("./flowerpot.js");
+var flowerPot = require("./lib/flowerpot.js");
 var AppInsights = require("applicationinsights");
 
 var INSTRUMENTATION_KEY = 'dcce6d5d-0048-4276-84e5-de12ea72f5dc';
