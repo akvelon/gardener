@@ -51,6 +51,20 @@ function Pot(onReady, flowerName) {
         }
     };
 
+    var visualizeFlowerHealth = function(health) {
+        that.ledR.off();
+        that.ledG.off();
+        that.ledB.off();
+        if(health > 4) {
+            that.ledG.on();
+        } else if (health < 3) {
+            that.ledR.on();
+        } else {
+            that.ledG.on();
+            that.ledR.on();
+        }
+    }
+
     var updateFlowerHealth = function() {
         var result = 5;
         that.recommendations = [];
@@ -74,6 +88,7 @@ function Pot(onReady, flowerName) {
                 result = result - recommendedParam.weight;
             }
         }
+        visualizeFlowerHealth(result);
         that.flowerHealth = result;
     };
 
