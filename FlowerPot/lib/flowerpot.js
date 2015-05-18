@@ -153,4 +153,24 @@ Pot.prototype.lightOff = function() {
     this.ledLight.off();
 }
 
+Pot.prototype.invokeCommand = function(name, parameter) {
+    if(name === 'getVitalParameter') {
+        return Pot.prototype.getFlowervitalParameter(parameter);
+    } else if (name === 'getRecommendations') {
+        return Pot.prototype.getRecommendations();
+    } else if (name === 'getFlowerName') {
+        return Pot.prototype.getFlowerName();
+    } else if (name === 'getFlowerHealth') {
+        return Pot.prototype.getFlowerHealth();
+    } else if (name === 'sprincleFlower') {
+        return Pot.prototype.sprincleFlower();
+    } else if (name === 'lightOn') {
+        return Pot.prototype.lightOn();
+    } else if (name === 'lightOff') {
+        return Pot.prototype.lightOff();
+    } else {
+       console.log('Unknown command: ' + name);
+    }
+}
+
 module.exports.Pot = Pot;
