@@ -54,7 +54,7 @@ var app = {
     createInterface: function (successCallback, errorCallback) {
         app.busAttachment.createInterface(function (interfaceDesc) {
             app.log("Created interface " + INTERFACE_NAME + " for current BusAttachment");
-        	interfaceDesc.addMethod("getParamValue", "s", "s", "paramName,paramValue");
+        	interfaceDesc.addMethod("invokeCommand", "ss", "s", "commandName,paramName,paramValue");
             interfaceDesc.activate(function () {
                 app.log("Interface " + INTERFACE_NAME + " Activated successfully");
                 successCallback(interfaceDesc);
@@ -137,7 +137,9 @@ var app = {
     },
 
     pollStatus: function () {
-        app.callAJMethod('getParamValue', ['soil_humidity'], function() {
+        app.callAJMethod('invokeCommand', ['getVitalParameter', 'soil_humidity'], function (result) {
+            var data = JSON.parse(result);
+            document.getElementById('humidity_value').innerText = data;
             app.queue.push(function() {
                 app.pollStatus();
             });
@@ -155,15 +157,25 @@ var app = {
 
         console.log('Received Event: ' + id);
 
-        document.getElementById("light_switch", function() {
+        document.getElementById("light_switch").addEventListener('click', function() {
             app.queue.push(function() {
-                app.callAJMethod("light", ["on"]);
+                app.callAJMethod("invokeCommand", ["lightOn", ""], function(result) {
+                    console.log(result);
+                });
             });
         });
 
-        document.getElementById("fill_switch", function () {
+        document.getElementById("light_switch_off").addEventListener('click', function () {
             app.queue.push(function () {
-                app.callAJMethod("fill", []);
+                app.callAJMethod("invokeCommand", ["lightOff", ""], function(res) {
+                    console.log(res);
+                });
+            });
+        });
+
+        document.getElementById("fill_switch").addEventListener('click', function () {
+            app.queue.push(function () {
+                app.callAJMethod("invokeCommand", ["sprincleFlower", ""]);
             });
         });
 
@@ -173,9 +185,9 @@ var app = {
                 var method = app.queue.shift();
                 method && method();
             }
-        }, 500);
+        }, 2000);
 
-        //app.pollStatus();
+        app.pollStatus();
     },
 
     callAJMethod: function (methodName, methodParams, callback) {
@@ -191,10 +203,10 @@ var app = {
             app.createProxyBusObject(app.busAttachment, sessionId, function (proxyBusObject) {
                 app.proxyBusObject = proxyBusObject;
                 app.proxyBusObject.methodCall(function (res) {
-                    console.log('Currrent humidity: ' + JSON.stringify(res));
                     app.busAttachment.leaveSession(function () {
                         app.log('Left session');
-                        callback && callback();
+                        console.log(res);
+                        callback && callback(res);
                     }, app.fail("Failed to left session"), sessionId);
                 }, app.fail("Failed to call remote method "), INTERFACE_NAME, methodName, methodParams);
             }, app.fail("Failed to create proxyBusObject"));
