@@ -10,9 +10,6 @@ AppInsights
     .start();
 
 var pot1 = new flowerPot.Pot(function(){
-        setTimeout(function(){
-            pot1.sprincleFlower();
-        }, 3000);
         setInterval(function(){
             console.log("Flower name: " + pot1.getFlowerName());
             var flowerHealth = pot1.getFlowerHealth();
@@ -32,8 +29,7 @@ var pot1 = new flowerPot.Pot(function(){
             for(var index in recommendations) {
                 console.log(recommendations[index].message);
             }
-
-
         }, 1000);
     }
 );
+

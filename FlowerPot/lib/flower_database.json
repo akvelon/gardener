@@ -3,7 +3,7 @@
         "soil_humidity": {
             "min": 40,
             "max": 80,
-            "weight": 1
+            "weight": 2
         },
         "air_humidity": {
             "min": 40,
@@ -18,14 +18,14 @@
         "illuminance": {
             "min": 50,
             "max": 90,
-            "weight": 1
+            "weight": 2
         }
     },
     "kannabis": {
         "soil_humidity": {
             "min": 40,
             "max": 80,
-            "weight": 1
+            "weight": 2
         },
         "air_humidity": {
             "min": 40,
@@ -40,7 +40,7 @@
         "illuminance": {
             "min": 50,
             "max": 90,
-            "weight": 1
+            "weight": 2
         }
     }
 }

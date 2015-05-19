@@ -9,9 +9,9 @@ var SPRINCLE_SERVO_MAX = 50;
 var SPRINCLE_TIMEOUT = 2000;
 
 var LED_LIGHT_PIN = 10;
-var LED_R_PIN = 11;
-var LED_G_PIN = 12;
-var LED_B_PIN = 13;
+var LED_G_PIN = 11;
+var LED_B_PIN = 12;
+var LED_R_PIN = 13;
 
 var Five = require('johnny-five');
 if (EMULATE_SENSORS) {
@@ -103,6 +103,7 @@ function Pot(onReady, flowerName) {
         that.ledG = new Five.Led(LED_G_PIN);
         that.ledB = new Five.Led(LED_B_PIN);
 
+	that.lightOff();
         // Bind parameters to sensors. Create Pin object for each parameter.
         for (var parameter in that.flowerVitalParameters) {
             that.flowerVitalParameters[parameter].pinObject = new Five.Pin(that.flowerVitalParameters[parameter].pinName);
@@ -151,6 +152,13 @@ Pot.prototype.lightOn = function() {
 
 Pot.prototype.lightOff = function() {
     this.ledLight.off();
+}
+
+Pot.prototype.shutdown = function() {
+    this.ledLight.off();
+    this.ledR.off();
+    this.ledG.off();
+    this.ledB.off();
 }
 
 Pot.prototype.invokeCommand = function(name, parameter) {
