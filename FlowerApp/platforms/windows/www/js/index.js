@@ -28,6 +28,7 @@ var CONNECT_SPEC = null;//"tcp:addr=gardener,port=9955";
 var app = {
     busAttachment: null,
     proxyBusObject: null,
+    queue: [],
 
     // Application Constructor
     initialize: function() {
@@ -136,27 +137,11 @@ var app = {
     },
 
     pollStatus: function () {
-        // Initialize shortcuts to AllJoyn objects
-        var SessionOpts = msopentech.alljoyn.SessionOpts;
-        var TransportMask = msopentech.alljoyn.TransportMask;
-
-        var opts = new SessionOpts(SessionOpts.TrafficType.TRAFFIC_MESSAGES,
-            false, SessionOpts.Proximity.PROXIMITY_ANY, TransportMask.TRANSPORT_ANY);
-
-        setInterval(function () {
-            app.busAttachment.joinSession(function (sessionId) {
-                app.log('Joined session ' + sessionId);
-                app.createProxyBusObject(app.busAttachment, sessionId, function (proxyBusObject) {
-                    app.proxyBusObject = proxyBusObject;
-                    app.proxyBusObject.methodCall(function (res) {
-                        console.log('Currrent humidity: ' + JSON.stringify(res));
-                        app.busAttachment.leaveSession(function () {
-                            app.log('Left session');
-                        }, app.fail("Failed to left session"), sessionId);
-                    }, app.fail("Failed to call remote method "), INTERFACE_NAME, 'getParamValue', ['soil_humidity']);
-                }, app.fail("Failed to create proxyBusObject"));
-            }, app.fail("Failed to join session"), app.SERVICE, SERVICE_PORT, opts);
-        }, 2000);
+        app.callAJMethod('getParamValue', ['soil_humidity'], function() {
+            app.queue.push(function() {
+                app.pollStatus();
+            });
+        });
     },
 
     // Update DOM on a Received Event
@@ -170,7 +155,50 @@ var app = {
 
         console.log('Received Event: ' + id);
 
+        document.getElementById("light_switch", function() {
+            app.queue.push(function() {
+                app.callAJMethod("light", ["on"]);
+            });
+        });
+
+        document.getElementById("fill_switch", function () {
+            app.queue.push(function () {
+                app.callAJMethod("fill", []);
+            });
+        });
+
+        // Start watching on queue and execute queued methods
+        setInterval(function() {
+            if (app && app.queue && app.queue.length > 0) {
+                var method = app.queue.shift();
+                method && method();
+            }
+        }, 500);
+
         //app.pollStatus();
+    },
+
+    callAJMethod: function (methodName, methodParams, callback) {
+        // Initialize shortcuts to AllJoyn objects
+        var SessionOpts = msopentech.alljoyn.SessionOpts;
+        var TransportMask = msopentech.alljoyn.TransportMask;
+
+        var opts = new SessionOpts(SessionOpts.TrafficType.TRAFFIC_MESSAGES,
+            false, SessionOpts.Proximity.PROXIMITY_ANY, TransportMask.TRANSPORT_ANY);
+
+        app.busAttachment.joinSession(function (sessionId) {
+            app.log('Joined session ' + sessionId);
+            app.createProxyBusObject(app.busAttachment, sessionId, function (proxyBusObject) {
+                app.proxyBusObject = proxyBusObject;
+                app.proxyBusObject.methodCall(function (res) {
+                    console.log('Currrent humidity: ' + JSON.stringify(res));
+                    app.busAttachment.leaveSession(function () {
+                        app.log('Left session');
+                        callback && callback();
+                    }, app.fail("Failed to left session"), sessionId);
+                }, app.fail("Failed to call remote method "), INTERFACE_NAME, methodName, methodParams);
+            }, app.fail("Failed to create proxyBusObject"));
+        }, app.fail("Failed to join session"), app.SERVICE, SERVICE_PORT, opts);
     }
 };
 
